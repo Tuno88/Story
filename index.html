@@ -128,7 +128,8 @@
         document.getElementById('share_btn').addEventListener('click', function () {
             let text = `I just got ${count} $IP in the $IP Hunting Game! Can you beat my score?`;
             let url = window.location.href;
-            let shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+            let imageUrl = 'https://raw.githubusercontent.com/Tuno88/Story/main/story02.png'; 
+            let shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&media=${encodeURIComponent(imageUrl)}`;
             window.open(shareUrl, '_blank');
         });
 
