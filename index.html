@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">    
+    <title>$IP Hunt</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            position: relative;
+            cursor: url('pointer.png'), auto;
+
+        }
+
+        #count_panel {
+            height: auto;
+        }
+        #touch_panel {
+            width: 60vw;
+            max-width: 500px;
+            height: 60vh;
+            background-size: 70%;
+            background-position: top;
+            background-repeat: no-repeat;
+            transition: background-image 0.3s ease-in-out;
+        }
+        .molandak {
+            background-image: url('./story01.png');
+        }
+        .touch_molandak {
+            background-image: url('./story02.png');
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-3px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.2s;
+        }
+        h1 {
+            color: rgb(227, 196, 40);
+        }
+        h3 {
+            color: antiquewhite;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: gold;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: url('pointer.png'), auto;
+        }
+        .custom-cursor {
+            width: 30px;
+            height: 30px;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s linear;
+        }
+    </style>
+</head>
+<body>
+    <div id="count_panel">
+        <h1>$IP Hunting Game</h1>
+        <h3>$IP Count: <span id="touch_count">0</span></h3>
+        <button id="share_btn">Share My Score</button>
+    </div>
+    <div id="touch_panel" class="molandak"></div>
+    <audio id="click_sound" src="./click.mp3"></audio>
+
+    <script>
+        let touch_count = document.getElementById('touch_count');
+        let touch_panel = document.getElementById('touch_panel');
+        let click_sound = document.getElementById('click_sound');
+        let count = 0;
+        let is_touch = false;
+
+        function animateCount(target, start, end, duration) {
+            let range = end - start;
+            let stepTime = Math.abs(Math.floor(duration / range));
+            let current = start;
+            let increment = end > start ? 1 : -1;
+            let timer = setInterval(function () {
+                current += increment;
+                target.innerHTML = current;
+                if (current == end) {
+                    clearInterval(timer);
+                }
+            }, stepTime);
+        }
+
+        touch_panel.addEventListener('click', function () {
+            count += 1;
+            if (!is_touch) {
+                touch_panel.classList.remove('molandak');
+                touch_panel.classList.add('touch_molandak');
+                is_touch = true;
+            } else {
+                touch_panel.classList.remove('touch_molandak');
+                touch_panel.classList.add('molandak');
+                is_touch = false;
+            }
+            touch_panel.classList.add('shake');
+            setTimeout(() => touch_panel.classList.remove('shake'), 200);
+            click_sound.play();
+            animateCount(touch_count, count - 1, count, 200);
+        });
+
+        document.getElementById('share_btn').addEventListener('click', function () {
+            let text = `I just got ${count} $IP in the $IP Hunting Game! Can you beat my score?`;
+            let url = window.location.href;
+            let shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+            window.open(shareUrl, '_blank');
+        });
+
+
+    </script>
+</body>
+</html>
